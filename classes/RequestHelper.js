@@ -61,24 +61,21 @@ class RequestHelper {
 
     _handleResponse(fnError, response, body, resolve, reject) {
         if (fnError) {
-            const error = this.app.utils.generateError('business', this.name, 'service', null, 'connection_error');
-            return reject({
-                status: 400,
-                errors: [error]
-            });
+            return reject(this.app.utils.createError(503, 'api_connection_error', []));
         }
 
         if(body && body.error) {
             const errors = [];
             for(let error of body.error){
-                const errorItem = this.app.utils.generateError('business', this.name, 'service', null, error.keyword);
-                errors.push(errorItem);
+                errors.push({
+                    layer: 'business',
+                    api: this.name,
+                    keyword: error.keyword,
+                    message: error.keyword
+                });
             }
 
-            return reject({
-                status: 400,
-                errors: errors
-            });
+            return reject(this.app.utils.createError(400, 'api_error', errors));
         } else {
             resolve({ headers: response.headers, result: body.result});
         }
