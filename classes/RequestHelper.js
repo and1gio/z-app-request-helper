@@ -4,7 +4,7 @@ const request = require('request');
 
 class RequestHelper {
 
-    constructor (app, name, host, port, path, secure, debug) {
+    constructor(app, name, host, port, path, secure, debug) {
         this.name = name;
         this.host = host;
         this.port = port;
@@ -21,7 +21,7 @@ class RequestHelper {
      * @param {*} params
      * @param {*} headers
      */
-    async request (method, params, headers) {
+    async request(method, params, headers) {
         try {
             return await this._makeRequest('post', method, params, headers);
         } catch (error) {
@@ -32,7 +32,7 @@ class RequestHelper {
     /**
      * Private Methods
      */
-    _makeRequest (type, method, params, options) {
+    _makeRequest(type, method, params, options) {
         const protocol = this.secure ? 'https://' : "http://";
         const methodEndpoint = protocol.concat(this.host, ":", this.port, this.path, method);
 
@@ -42,7 +42,7 @@ class RequestHelper {
 
         params = { url: methodEndpoint, json: params };
 
-        if(options){
+        if (options) {
             params = Object.assign(options, params);
         }
 
@@ -61,23 +61,15 @@ class RequestHelper {
 
     _handleResponse(fnError, response, body, resolve, reject) {
         if (fnError) {
-            return reject(this.app.utils.createError(503, 'api_connection_error', []));
+            return reject(this.app.utils.createError(503, [{
+                keyword: 'connection_problem'
+            }]));
         }
 
-        if(body && body.error) {
-            const errors = [];
-            for(let error of body.error){
-                errors.push({
-                    layer: 'business',
-                    api: this.name,
-                    keyword: error.keyword,
-                    message: error.keyword
-                });
-            }
-
-            return reject(this.app.utils.createError(400, 'api_error', errors));
+        if (body && body.error) {
+            return reject(this.app.utils.createError(400, body.error));
         } else {
-            resolve({ headers: response.headers, result: body.result});
+            resolve({ headers: response.headers, result: body.result });
         }
     };
 }
