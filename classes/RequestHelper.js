@@ -4,13 +4,14 @@ const request = require('request');
 
 class RequestHelper {
 
-    constructor(app, name, host, port, path, secure, debug) {
+    constructor(app, name, host, port, path, secure, debug, transform) {
         this.name = name;
         this.host = host;
         this.port = port;
         this.path = path;
         this.secure = secure || false;
         this.debug = debug || false;
+        this.transform = transform;
 
         this.app = app;
     }
@@ -69,7 +70,11 @@ class RequestHelper {
         if (body && body.error) {
             return reject(this.app.utils.createError(400, body.error));
         } else {
-            resolve({ headers: response.headers, result: body.result });
+            let result = body.result;
+            if (this.transform && typeof this.transform === 'function') {
+                result = this.transform(result);
+            }
+            resolve({ headers: response.headers, result: result });
         }
     };
 }

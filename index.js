@@ -15,7 +15,7 @@ class RequestHelperInitializer extends Initializer {
             this.app.requestHelpers = {};
             for (let key in this.app.configs.requestHelpers) {
                 const config = this.app.configs.requestHelpers[key];
-                this.app.requestHelpers[key] = new RequestHelper(this.app, key, config.host, config.port, config.path, config.secure, config.debug);
+                this.app.requestHelpers[key] = new RequestHelper(this.app, key, config.host, config.port, config.path, config.secure, config.debug, config.transform);
             }
         } catch (error) {
             throw error;
