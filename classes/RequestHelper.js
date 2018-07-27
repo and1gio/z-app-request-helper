@@ -4,16 +4,17 @@ const request = require('request');
 
 class RequestHelper {
 
-    constructor(app, name, host, port, path, secure, debug, transform) {
-        this.name = name;
-        this.host = host;
-        this.port = port;
-        this.path = path;
-        this.secure = secure || false;
-        this.debug = debug || false;
-        this.transform = transform;
-
+    constructor(app, name, config) {
         this.app = app;
+        this.name = name;
+
+        this.host = config.host;
+        this.port = config.port;
+        this.path = config.path;
+        this.secure = config.secure || false;
+        this.debug = config.debug || false;
+        this.transform = config.transform;
+        this.applicationId = config.applicationId;
     }
 
     /**
