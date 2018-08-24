@@ -1,6 +1,6 @@
 {
     "name": "@msda/z-app-request-helper",
-    "version": "1.0.3",
+    "version": "1.0.4",
     "description": "ZApp Request Helper Initializer",
     "main": "index.js",
     "repository": {
@@ -14,7 +14,7 @@
     },
     "homepage": "https://github.com/and1gio/z-app-request-helper#readme",
     "dependencies": {
-        "@and1gio/z-app-core": "1.0.0",
+        "@and1gio/z-app-core": "1.0.1",
         "request": "2.87.0"
     }
 }
