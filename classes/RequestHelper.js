@@ -71,11 +71,15 @@ class RequestHelper {
         if (body && body.error) {
             return reject(this.app.utils.createError(400, body.error));
         } else {
-            let result = body.result;
-            if (this.transform && typeof this.transform === 'function') {
-                result = this.transform(result);
+            if (response.statusCode == 200) {
+                let result = body.result;
+                if (this.transform && typeof this.transform === 'function') {
+                    result = this.transform(result);
+                }
+                resolve({ statusCode: response.statusCode, headers: response.headers, result: result });
+            } else {
+                return reject(this.app.utils.createError(response.statusCode, [{ keyword: 'bad_response', message: body }]));
             }
-            resolve({ headers: response.headers, result: result });
         }
     };
 }
