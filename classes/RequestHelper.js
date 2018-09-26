@@ -69,7 +69,12 @@ class RequestHelper {
         }
 
         if (body && body.error) {
-            return reject(this.app.utils.createError(400, body.error));
+            if (body.error.list) {
+                return reject(body.error);
+            } else {
+                // find & replace .. & remove later
+                return reject(this.app.utils.createError(400, body.error));
+            }
         } else {
             if (response.statusCode == 200) {
                 let result = body.result;
