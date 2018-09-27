@@ -63,20 +63,19 @@ class RequestHelper {
 
     _handleResponse(fnError, response, body, resolve, reject) {
         if (fnError) {
-            return reject(this.app.utils.createError(503, [{
-                keyword: 'connection_problem'
-            }]));
+            return reject(this.app.utils.createError(503, [{ keyword: 'connection_problem' }]));
         }
 
         if (body && body.error) {
-            if (body.error.list) {
+            if (body.error instanceof Array) {
+                return reject(this.app.utils.createError(400, body.error));
+            } else if (body.error.list instanceof Array) {
                 return reject(body.error);
             } else {
-                // find & replace .. & remove later
-                return reject(this.app.utils.createError(400, body.error));
+                return reject(this.app.utils.createError(response.statusCode, [{ keyword: 'bad_response', message: body }]));
             }
         } else {
-            if (response.statusCode == 200) {
+            if (response.statusCode == 200 && body.result) {
                 let result = body.result;
                 if (this.transform && typeof this.transform === 'function') {
                     result = this.transform(result);
