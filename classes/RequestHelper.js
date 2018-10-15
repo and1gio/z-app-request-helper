@@ -75,12 +75,20 @@ class RequestHelper {
                 return reject(this.app.utils.createError(response.statusCode, [{ keyword: 'bad_response', message: body }]));
             }
         } else {
-            if (response.statusCode == 200 && body.result) {
-                let result = body.result;
-                if (this.transform && typeof this.transform === 'function') {
-                    result = this.transform(result);
+            if (response.statusCode == 200) {
+                if (body.result) {
+                    let result = body.result;
+                    if (this.transform && typeof this.transform === 'function') {
+                        result = this.transform(result);
+                    }
+                    resolve({ statusCode: response.statusCode, headers: response.headers, result: result });
+                } else {
+                    let result = body;
+                    if (this.transform && typeof this.transform === 'function') {
+                        result = this.transform(body);
+                    }
+                    resolve({ statusCode: response.statusCode, headers: response.headers, result: result });
                 }
-                resolve({ statusCode: response.statusCode, headers: response.headers, result: result });
             } else {
                 return reject(this.app.utils.createError(response.statusCode, [{ keyword: 'bad_response', message: body }]));
             }
