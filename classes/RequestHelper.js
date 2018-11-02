@@ -69,7 +69,7 @@ class RequestHelper {
         if (body && body.error) {
             if (body.error instanceof Array) {
                 return reject(this.app.utils.createError(400, body.error));
-            } else if (body.error.list instanceof Array) {
+            } else if (body.error.items instanceof Array) {
                 return reject(body.error);
             } else {
                 return reject(this.app.utils.createError(response.statusCode, [{ keyword: 'bad_response', message: body }]));
