@@ -1,6 +1,6 @@
 {
     "name": "@msda/z-app-request-helper",
-    "version": "1.0.9",
+    "version": "1.0.10",
     "description": "ZApp Request Helper Initializer",
     "main": "index.js",
     "repository": {
